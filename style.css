@@ -1,0 +1,318 @@
+/* ================ BASE & RESET ================ */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/* Variables CSS */
+:root {
+  /* Couleurs des priorités */
+  --low-priority: #4caf50; /* Vert */
+  --medium-priority: #ff9800; /* Orange */
+  --high-priority: #f44336; /* Rouge */
+
+  /* Thème */
+  --primary: #4a6fa5; /* Bleu principal */
+  --dark: #2c3e50; /* Texte foncé */
+  --light-gray: #f8f9fa; /* Fond clair */
+}
+
+/* Reset global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif; /* Police moderne */
+}
+
+/* Styles de base */
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ================ LAYOUT PRINCIPAL ================ */
+.app-container {
+  display: flex;
+  min-height: 100vh; /* Pleine hauteur */
+  max-width: 1200px; /* Largeur max */
+  margin: 0 auto; /* Centrage */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Colonne GAUCHE (Formulaire - 30%) */
+.left-column {
+  flex: 0 0 30%; /* Largeur fixe à 30% */
+  max-width: 350px; /* Largeur max */
+  padding: 2rem;
+  background: white;
+  border-right: 1px solid #eaeaea;
+  overflow-y: auto; /* Défilement si contenu long */
+}
+
+/* Colonne DROITE (Affichage - 70%) */
+.right-column {
+  flex: 1; /* Prend 70% restant */
+  padding: 2rem;
+  background: var(--light-gray);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================ COMPOSANTS ================ */
+/* En-têtes */
+h1 {
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Formulaire */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espacement vertical */
+}
+
+#task-title,
+#task-desc,
+#task-priority {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+#task-desc {
+  min-height: 100px; /* Hauteur minimale */
+  resize: vertical; /* Redimension vertical uniquement */
+}
+
+/* Menu déroulant personnalisé */
+#task-priority {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 1em;
+}
+
+/* Bouton Ajouter */
+#add-task-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#add-task-btn:hover {
+  background: #3a5a8f;
+  transform: translateY(-2px);
+}
+
+/* Filtres */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: none;
+  background: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* ================ LISTE DES TÂCHES ================ */
+.tasks-container {
+  display: grid;
+  gap: 1rem;
+  max-height: calc(100vh - 300px); /* Hauteur avec défilement */
+  overflow-y: auto; /* Défilement vertical uniquement */
+  padding-right: 8px; /* Espace barre de défilement */
+}
+
+/* Tâche individuelle */
+.task {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: flex-start;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.task:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Bande de priorité */
+.task::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 8px 0 0 8px;
+}
+
+.task[data-priority="low"]::before {
+  background: var(--low-priority);
+}
+
+.task[data-priority="medium"]::before {
+  background: var(--medium-priority);
+}
+
+.task[data-priority="high"]::before {
+  background: var(--high-priority);
+}
+
+/* Case à cocher */
+.task input[type="checkbox"] {
+  margin-right: 12px;
+  margin-top: 4px;
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+/* Contenu de la tâche */
+.task-content {
+  flex: 1;
+}
+
+.task-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--dark);
+}
+
+.task-desc {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Actions */
+.task-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.delete-btn,
+.edit-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn {
+  color: #e74c3c;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
+}
+
+.edit-btn {
+  color: #3498db;
+}
+
+.edit-btn:hover {
+  color: #2980b9;
+}
+
+/* ================ INTERACTIONS ================ */
+/* Drag & Drop */
+.task.dragging {
+  opacity: 0.5;
+  background: #f1f5f9;
+  transform: rotate(3deg);
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ================ BARRE DE DÉFILEMENT ================ */
+.tasks-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tasks-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tasks-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tasks-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ================ RESPONSIVE ================ */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .left-column,
+  .right-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .left-column {
+    border-right: none;
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  .tasks-container {
+    max-height: 50vh; /* Ajustement mobile */
+  }
+}
+.task-content {
+  flex: 1; /* Prend tout l'espace disponible */
+  min-width: 0; /* Solution anti-débordement */
+}
